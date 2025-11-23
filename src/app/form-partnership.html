@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partnership Inquiry - Empire Liberty Group</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .form-container { background: white; padding: 50px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); max-width: 600px; width: 100%; }
+        .form-header { text-align: center; margin-bottom: 40px; }
+        .form-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .form-icon .material-symbols-outlined { color: white; font-size: 40px; }
+        .form-header h1 { font-size: 2rem; color: #1d1d1f; margin-bottom: 10px; }
+        .form-header p { color: #666; font-size: 1rem; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #1d1d1f; }
+        .required { color: #dc3545; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; transition: all 0.3s ease; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #0066cc; box-shadow: 0 0 0 4px rgba(0,102,204,0.1); }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .submit-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,102,204,0.3); }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; }
+        .back-link:hover { color: #0066cc; }
+        .success-message { display: none; background: #e8f5e9; color: #2e7d32; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .success-message.show { display: block; }
+        @media (max-width: 768px) { .form-container { padding: 30px 20px; } .form-header h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <div class="form-icon"><span class="material-symbols-outlined">groups</span></div>
+            <h1>Partnership Inquiry</h1>
+            <p>Explore strategic partnership opportunities</p>
+        </div>
+        <div class="success-message" id="successMessage">
+            <span class="material-symbols-outlined" style="font-size: 48px;">check_circle</span>
+            <h3>Inquiry Submitted!</h3>
+            <p>Our partnership team will contact you soon.</p>
+        </div>
+        <form id="partnershipForm">
+            <div class="form-group">
+                <label>Company/Organization Name <span class="required">*</span></label>
+                <input type="text" name="company" required placeholder="Your company name">
+            </div>
+            <div class="form-group">
+                <label>Contact Person <span class="required">*</span></label>
+                <input type="text" name="contactPerson" required placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label>Email Address <span class="required">*</span></label>
+                <input type="email" name="email" required placeholder="company@example.com">
+            </div>
+            <div class="form-group">
+                <label>Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
+            </div>
+            <div class="form-group">
+                <label>Partnership Type <span class="required">*</span></label>
+                <select name="type" required>
+                    <option value="">Select partnership type</option>
+                    <option value="Investment">Investment Partnership</option>
+                    <option value="Co-Investment">Co-Investment Opportunity</option>
+                    <option value="Buy-back">Buy-back Agreement</option>
+                    <option value="Joint Venture">Joint Venture</option>
+                    <option value="Strategic Alliance">Strategic Alliance</option>
+                    <option value="Distribution">Distribution Partnership</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Investment Capacity (Optional)</label>
+                <select name="investment">
+                    <option value="">Select range</option>
+                    <option value="< 50 Lakhs">Under ₹50 Lakhs</option>
+                    <option value="50 Lakhs - 2 Crores">₹50 Lakhs - 2 Crores</option>
+                    <option value="2-10 Crores">₹2-10 Crores</option>
+                    <option value="> 10 Crores">Above ₹10 Crores</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Details & Proposal <span class="required">*</span></label>
+                <textarea name="details" required placeholder="Describe your partnership proposal and expectations..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Partnership Inquiry</button>
+        </form>
+        <a href="empire.html#careers" class="back-link">← Back to Website</a>
+    </div>
+    <script>
+        document.getElementById('partnershipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = {
+                date: new Date().toISOString(),
+                company: this.company.value,
+                contactPerson: this.contactPerson.value,
+                email: this.email.value,
+                phone: this.phone.value,
+                type: this.type.value,
+                investment: this.investment.value,
+                details: this.details.value,
+                status: 'new'
+            };
+            let submissions = JSON.parse(localStorage.getItem('partnership_submissions') || '[]');
+            submissions.push(formData);
+            localStorage.setItem('partnership_submissions', JSON.stringify(submissions));
+            document.getElementById('successMessage').classList.add('show');
+            this.reset();
+            setTimeout(() => { window.location.href = 'empire.html#careers'; }, 3000);
+        });
+    </script>
+</body>
+</html>

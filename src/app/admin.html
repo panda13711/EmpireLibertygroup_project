@@ -1,0 +1,3106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empire Liberty Group - Website Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn-secondary {
+            background: #f5f5f7;
+            color: #333;
+        }
+
+        .nav-btn-secondary:hover {
+            background: #e8e8ea;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 30px;
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .welcome-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #1d1d1f;
+        }
+
+        .welcome-header p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        /* Section Cards */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .section-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .section-card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #1d1d1f;
+        }
+
+        .section-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Edit Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 50px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+            margin-bottom: 50px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 28px;
+            color: #1d1d1f;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            color: #333;
+            background: #f5f5f7;
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #999;
+            font-size: 14px;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f5f5f7;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8ea;
+        }
+
+        .btn-danger {
+            background: #ff3b30;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d62e23;
+            transform: translateY(-2px);
+        }
+
+        /* Image Upload Area */
+        .image-upload {
+            border: 3px dashed #d0d0d0;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .image-upload:hover {
+            border-color: #667eea;
+            background: #f5f7ff;
+        }
+
+        .image-upload .material-symbols-outlined {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            aspect-ratio: 1;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .delete-img {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 59, 48, 0.95);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-item .delete-img:hover {
+            background: #d62e23;
+            transform: scale(1.1);
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 15px;
+            z-index: 3000;
+            border-left: 5px solid #34c759;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .success-message.active {
+            display: flex;
+        }
+
+        .success-message .material-symbols-outlined {
+            color: #34c759;
+            font-size: 32px;
+        }
+
+        .success-message .message-text {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* List Items with Edit/Delete */
+        .list-item {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .list-item-content h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #1d1d1f;
+        }
+
+        .list-item-content p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .icon-btn.edit {
+            color: #667eea;
+        }
+
+        .icon-btn.edit:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .icon-btn.delete {
+            color: #ff3b30;
+        }
+
+        .icon-btn.delete:hover {
+            background: #ff3b30;
+            color: white;
+        }
+
+        /* Add New Button */
+        .add-new-btn {
+            width: 100%;
+            padding: 20px;
+            border: 3px dashed #d0d0d0;
+            background: #fafafa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .add-new-btn:hover {
+            border-color: #667eea;
+            background: #f5f7ff;
+        }
+
+        /* Two Column Layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+
+            .welcome-header {
+                padding: 25px;
+            }
+
+            .welcome-header h1 {
+                font-size: 24px;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-actions {
+                flex-wrap: wrap;
+            }
+
+            .modal-content {
+                margin: 0;
+            }
+
+            .modal-body {
+                max-height: 60vh;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            z-index: 4000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f0f0f0;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Stats Display */
+        .stats-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="logo">🌊 Empire Liberty Group - Website Editor</div>
+        <div class="nav-actions">
+            <a href="empire.html" target="_blank" class="nav-btn nav-btn-secondary">
+                <span class="material-symbols-outlined">visibility</span>
+                Preview Website
+            </a>
+            <a href="dashboard.html" class="nav-btn nav-btn-secondary">
+                <span class="material-symbols-outlined">dashboard</span>
+                View Submissions
+            </a>
+            <button class="nav-btn nav-btn-primary" onclick="exportAllData()">
+                <span class="material-symbols-outlined">download</span>
+                Export All
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="last-updated">Just Now</div>
+                <div class="stat-label">Last Updated</div>
+            </div>
+        </div>
+
+        <!-- Section Cards -->
+        <div class="sections-grid">
+            <!-- Navigation/Navbar Section -->
+            <div class="section-card" onclick="openSection('navbar')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">menu</span>
+                </div>
+                <h3>Navigation Menu</h3>
+                <p>Edit logo text and navigation menu links</p>
+            </div>
+
+            <!-- Hero Section -->
+            <div class="section-card" onclick="openSection('hero')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">home</span>
+                </div>
+                <h3>Homepage Hero</h3>
+                <p>Edit your main headline, tagline, and call-to-action buttons</p>
+            </div>
+
+            <!-- Trust Strip Section -->
+            <div class="section-card" onclick="openSection('trust')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">verified</span>
+                </div>
+                <h3>Trust Strip Badges</h3>
+                <p>Edit the 4 trust badges (MOU, Production, Projects, International)</p>
+            </div>
+
+            <!-- About Section -->
+            <div class="section-card" onclick="openSection('about')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">info</span>
+                </div>
+                <h3>About Us</h3>
+                <p>Update your company description and mission statement</p>
+            </div>
+
+            <!-- Technology Section -->
+            <div class="section-card" onclick="openSection('technology')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">science</span>
+                </div>
+                <h3>Technology & Methods</h3>
+                <p>Edit biofloc, RAS, cage culture, and other technology descriptions</p>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="section-card" onclick="openSection('projects')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">work</span>
+                </div>
+                <h3>Projects & Locations</h3>
+                <p>Add, edit, or remove project locations and details</p>
+            </div>
+
+            <!-- Team Section -->
+            <div class="section-card" onclick="openSection('team')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">groups</span>
+                </div>
+                <h3>Team & Leadership</h3>
+                <p>Manage team member profiles and photos</p>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="section-card" onclick="openSection('contact')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">contact_mail</span>
+                </div>
+                <h3>Contact Information</h3>
+                <p>Update phone numbers, emails, and office addresses</p>
+            </div>
+
+            <!-- Education Section -->
+            <div class="section-card" onclick="openSection('education')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">school</span>
+                </div>
+                <h3>AI Education & Training</h3>
+                <p>Edit training programs, features, and course details</p>
+            </div>
+
+            <!-- AI Features Section -->
+            <div class="section-card" onclick="openSection('ai-features')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">psychology</span>
+                </div>
+                <h3>AI Features Details</h3>
+                <p>Edit the 3 AI tools descriptions and benefits</p>
+            </div>
+
+            <!-- Training Modules Section -->
+            <div class="section-card" onclick="openSection('training-modules')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">menu_book</span>
+                </div>
+                <h3>Training Modules</h3>
+                <p>Edit the 8 comprehensive training modules</p>
+            </div>
+
+            <!-- Milestones Section -->
+            <div class="section-card" onclick="openSection('milestones')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">flag</span>
+                </div>
+                <h3>Milestones & Timeline</h3>
+                <p>Manage company achievements and key milestones</p>
+            </div>
+
+            <!-- Media Section -->
+            <div class="section-card" onclick="openSection('media')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">newspaper</span>
+                </div>
+                <h3>Media & Press</h3>
+                <p>Edit media cards (MOU document, Press releases, Videos)</p>
+            </div>
+
+            <!-- Careers Section -->
+            <div class="section-card" onclick="openSection('careers')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">work</span>
+                </div>
+                <h3>Careers & Partnerships</h3>
+                <p>Edit Partnership, Tender, Farmer Programs, Media Contact cards</p>
+            </div>
+
+            <!-- Footer Content Section -->
+            <div class="section-card" onclick="openSection('footer')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">format_align_center</span>
+                </div>
+                <h3>Footer Content</h3>
+                <p>Edit footer text, links, and copyright information</p>
+            </div>
+
+            <!-- Social Media Section -->
+            <div class="section-card" onclick="openSection('social')">
+                <div class="section-icon">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">share</span>
+                </div>
+                <h3>Social Media Links</h3>
+                <p>Update LinkedIn, YouTube, Instagram, Twitter URLs</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="success-message">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span class="message-text">Changes saved successfully!</span>
+    </div>
+
+    <!-- Navigation/Navbar Modal -->
+    <div class="modal" id="navbar-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Navigation Menu</h2>
+                <button class="close-btn" onclick="closeModal('navbar-modal')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nav-logo">Logo Text</label>
+                    <input type="text" id="nav-logo" placeholder="Empire Liberty Group">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nav-menu-items">Menu Items (comma-separated)</label>
+                    <textarea id="nav-menu-items" rows="3" placeholder="Home,About Us,Projects,Technology,Education,Milestones,Media,Careers,Contact"></textarea>
+                    <small>Enter menu items separated by commas</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('navbar-modal')">Cancel</button>
+                <button class="btn-primary" onclick="saveSection('navbar')">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trust Strip Modal -->
+    <div class="modal" id="trust-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Trust Strip Badges</h2>
+                <button class="close-btn" onclick="closeModal('trust-modal')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="trust-heading">Main Heading</label>
+                    <input type="text" id="trust-heading" placeholder="Trusted by Government • Proven Results • Pan-India Operations">
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Badge 1 - MOU</h3>
+                <div class="form-group">
+                    <label for="trust-badge1-title">Title</label>
+                    <input type="text" id="trust-badge1-title" placeholder="₹495 Crore MOU">
+                </div>
+                <div class="form-group">
+                    <label for="trust-badge1-desc">Description</label>
+                    <textarea id="trust-badge1-desc" rows="2" placeholder="Strategic development partnership..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Badge 2 - Production</h3>
+                <div class="form-group">
+                    <label for="trust-badge2-title">Title</label>
+                    <input type="text" id="trust-badge2-title" placeholder="6 Crore+ Production">
+                </div>
+                <div class="form-group">
+                    <label for="trust-badge2-desc">Description</label>
+                    <textarea id="trust-badge2-desc" rows="2" placeholder="5 crore spawn produced..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Badge 3 - Pan-India</h3>
+                <div class="form-group">
+                    <label for="trust-badge3-title">Title</label>
+                    <input type="text" id="trust-badge3-title" placeholder="Pan-India Projects">
+                </div>
+                <div class="form-group">
+                    <label for="trust-badge3-desc">Description</label>
+                    <textarea id="trust-badge3-desc" rows="2" placeholder="Operations in Nagpur, Mumbai..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Badge 4 - International</h3>
+                <div class="form-group">
+                    <label for="trust-badge4-title">Title</label>
+                    <input type="text" id="trust-badge4-title" placeholder="International Collaboration">
+                </div>
+                <div class="form-group">
+                    <label for="trust-badge4-desc">Description</label>
+                    <textarea id="trust-badge4-desc" rows="2" placeholder="Strategic aquarium partnership with Dubai..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('trust-modal')">Cancel</button>
+                <button class="btn-primary" onclick="saveSection('trust')">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technology Section Modal -->
+    <div class="modal" id="technology-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Technology Cards</h2>
+                <button class="close-btn" onclick="closeModal('technology-modal')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 style="margin-bottom: 15px;">Card 1 - Biofloc</h3>
+                <div class="form-group">
+                    <label for="tech1-title">Title</label>
+                    <input type="text" id="tech1-title" placeholder="Biofloc Technology">
+                </div>
+                <div class="form-group">
+                    <label for="tech1-desc">Description</label>
+                    <textarea id="tech1-desc" rows="3" placeholder="Zero water exchange systems..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 2 - RAS</h3>
+                <div class="form-group">
+                    <label for="tech2-title">Title</label>
+                    <input type="text" id="tech2-title" placeholder="Recirculating Aquaculture Systems">
+                </div>
+                <div class="form-group">
+                    <label for="tech2-desc">Description</label>
+                    <textarea id="tech2-desc" rows="3" placeholder="Advanced filtration and water treatment..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 3 - Cage Culture</h3>
+                <div class="form-group">
+                    <label for="tech3-title">Title</label>
+                    <input type="text" id="tech3-title" placeholder="Cage Culture & Reservoir Operations">
+                </div>
+                <div class="form-group">
+                    <label for="tech3-desc">Description</label>
+                    <textarea id="tech3-desc" rows="3" placeholder="Modern cage design, optimized stocking..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 4 - Hatchery</h3>
+                <div class="form-group">
+                    <label for="tech4-title">Title</label>
+                    <input type="text" id="tech4-title" placeholder="Modern Hatchery Operations">
+                </div>
+                <div class="form-group">
+                    <label for="tech4-desc">Description</label>
+                    <textarea id="tech4-desc" rows="3" placeholder="Controlled spawning, broodstock management..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 5 - Feed Management</h3>
+                <div class="form-group">
+                    <label for="tech5-title">Title</label>
+                    <input type="text" id="tech5-title" placeholder="Feed & Nutrition Management">
+                </div>
+                <div class="form-group">
+                    <label for="tech5-desc">Description</label>
+                    <textarea id="tech5-desc" rows="3" placeholder="Precision feeding strategies..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 6 - Quality Control</h3>
+                <div class="form-group">
+                    <label for="tech6-title">Title</label>
+                    <input type="text" id="tech6-title" placeholder="Quality & Traceability">
+                </div>
+                <div class="form-group">
+                    <label for="tech6-desc">Description</label>
+                    <textarea id="tech6-desc" rows="3" placeholder="Comprehensive batch records..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('technology-modal')">Cancel</button>
+                <button class="btn-primary" onclick="saveSection('technology')">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Section Modal -->
+    <div class="modal" id="media-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Media & Press</h2>
+                <button class="close-btn" onclick="closeModal('media-modal')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 style="margin-bottom: 15px;">Card 1 - MOU Document</h3>
+                <div class="form-group">
+                    <label for="media1-title">Title</label>
+                    <input type="text" id="media1-title" placeholder="₹495 Crore MOU">
+                </div>
+                <div class="form-group">
+                    <label for="media1-desc">Description</label>
+                    <textarea id="media1-desc" rows="2" placeholder="Official MOU document with Government..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="media1-link">Download Link</label>
+                    <input type="text" id="media1-link" placeholder="https://...">
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 2 - Press Releases</h3>
+                <div class="form-group">
+                    <label for="media2-title">Title</label>
+                    <input type="text" id="media2-title" placeholder="Press Releases">
+                </div>
+                <div class="form-group">
+                    <label for="media2-desc">Description</label>
+                    <textarea id="media2-desc" rows="2" placeholder="Collection of press releases..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="media2-link">Link URL</label>
+                    <input type="text" id="media2-link" placeholder="https://...">
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 3 - Operations Videos</h3>
+                <div class="form-group">
+                    <label for="media3-title">Title</label>
+                    <input type="text" id="media3-title" placeholder="Operations Videos">
+                </div>
+                <div class="form-group">
+                    <label for="media3-desc">Description</label>
+                    <textarea id="media3-desc" rows="2" placeholder="Video documentation of hatchery operations..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="media3-link">Video Link</label>
+                    <input type="text" id="media3-link" placeholder="https://...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('media-modal')">Cancel</button>
+                <button class="btn-primary" onclick="saveSection('media')">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Careers Section Modal -->
+    <div class="modal" id="careers-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Careers & Partnerships</h2>
+                <button class="close-btn" onclick="closeModal('careers-modal')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3 style="margin-bottom: 15px;">Card 1 - Partnership & Investment</h3>
+                <div class="form-group">
+                    <label for="career1-title">Title</label>
+                    <input type="text" id="career1-title" placeholder="Partnership & Investment">
+                </div>
+                <div class="form-group">
+                    <label for="career1-desc">Description</label>
+                    <textarea id="career1-desc" rows="3" placeholder="Explore buy-back guarantees..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 2 - Tender & Procurement</h3>
+                <div class="form-group">
+                    <label for="career2-title">Title</label>
+                    <input type="text" id="career2-title" placeholder="Tender & Procurement">
+                </div>
+                <div class="form-group">
+                    <label for="career2-desc">Description</label>
+                    <textarea id="career2-desc" rows="3" placeholder="Vendor opportunities for feed plant..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 3 - Farmer Programs</h3>
+                <div class="form-group">
+                    <label for="career3-title">Title</label>
+                    <input type="text" id="career3-title" placeholder="Farmer Programs">
+                </div>
+                <div class="form-group">
+                    <label for="career3-desc">Description</label>
+                    <textarea id="career3-desc" rows="3" placeholder="Free seed program registration..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px;">Card 4 - Media & Press</h3>
+                <div class="form-group">
+                    <label for="career4-title">Title</label>
+                    <input type="text" id="career4-title" placeholder="Media & Press">
+                </div>
+                <div class="form-group">
+                    <label for="career4-desc">Description</label>
+                    <textarea id="career4-desc" rows="3" placeholder="Press kit downloads, media contact..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('careers-modal')">Cancel</button>
+                <button class="btn-primary" onclick="saveSection('careers')">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section Modal -->
+    <div class="modal" id="hero-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Homepage Hero</h2>
+                <button class="close-btn" onclick="closeModal('hero-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>
+                        Main Headline
+                        <span class="hint">The big text visitors see first</span>
+                    </label>
+                    <input type="text" id="hero-title" placeholder="e.g., Building India's Aquaculture Future">
+                </div>
+                <div class="form-group">
+                    <label>
+                        Subtitle / Tagline
+                        <span class="hint">Supporting text under the headline</span>
+                    </label>
+                    <textarea id="hero-subtitle" placeholder="e.g., Empire Liberty Group is revolutionizing fisheries with advanced hatchery technology..."></textarea>
+                </div>
+                
+                <h3 style="margin-top: 25px; margin-bottom: 15px; color: #0066cc;">Call-to-Action Buttons</h3>
+                
+                <div class="form-group">
+                    <label>
+                        Button 1 - Primary (Request Quotation)
+                        <span class="hint">Main action button text</span>
+                    </label>
+                    <input type="text" id="hero-cta1" placeholder="Request Quotation">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        Button 2 - Secondary (Partnership Inquiry)
+                        <span class="hint">Second button text</span>
+                    </label>
+                    <input type="text" id="hero-cta2" placeholder="Partnership Inquiry">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        Button 3 - Secondary (View Projects)
+                        <span class="hint">Third button text</span>
+                    </label>
+                    <input type="text" id="hero-cta3" placeholder="View Projects">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('hero-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSection('hero')">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section Modal -->
+    <div class="modal" id="about-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit About Us</h2>
+                <button class="close-btn" onclick="closeModal('about-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>
+                        Company Tagline
+                        <span class="hint">Short, memorable phrase about your company</span>
+                    </label>
+                    <input type="text" id="about-tagline" placeholder="e.g., Pioneering Sustainable Aquaculture">
+                </div>
+                <div class="form-group">
+                    <label>
+                        Company Description
+                        <span class="hint">Tell your story in detail</span>
+                    </label>
+                    <textarea id="about-description" style="min-height: 200px;" placeholder="Write about your company, mission, vision, and values..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('about-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSection('about')">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Section Modal -->
+    <div class="modal" id="projects-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Projects & Locations</h2>
+                <button class="close-btn" onclick="closeModal('projects-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="projects-list"></div>
+                <button class="add-new-btn" onclick="addNewProject()">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Add New Project
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('projects-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Edit Modal -->
+    <div class="modal" id="project-edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="project-edit-title">Add New Project</h2>
+                <button class="close-btn" onclick="closeModal('project-edit-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="project-edit-id">
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="project-name" placeholder="e.g., Vasai-Virar Hatchery">
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="project-location" placeholder="e.g., Maharashtra">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <input type="text" id="project-status" placeholder="e.g., Operational, Under Construction">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="project-description" placeholder="Describe the project..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('project-edit-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProject()">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Project
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section Modal -->
+    <div class="modal" id="team-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Team Members</h2>
+                <button class="close-btn" onclick="closeModal('team-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="team-list"></div>
+                <button class="add-new-btn" onclick="addNewTeamMember()">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Add Team Member
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('team-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Member Edit Modal -->
+    <div class="modal" id="team-edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="team-edit-title">Add Team Member</h2>
+                <button class="close-btn" onclick="closeModal('team-edit-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="team-edit-id">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="team-name" placeholder="e.g., John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Position / Title</label>
+                    <input type="text" id="team-position" placeholder="e.g., Founder & CEO">
+                </div>
+                <div class="form-group">
+                    <label>Bio / Description</label>
+                    <textarea id="team-bio" placeholder="Write about this team member..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Photo</label>
+                    <div class="image-upload" onclick="document.getElementById('team-photo-input').click()">
+                        <span class="material-symbols-outlined">add_photo_alternate</span>
+                        <p>Click to upload photo</p>
+                    </div>
+                    <input type="file" id="team-photo-input" accept="image/*" style="display: none;" onchange="handleTeamPhoto(event)">
+                    <div id="team-photo-preview" class="image-preview-grid"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('team-edit-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTeamMember()">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Team Member
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Section Modal -->
+    <div class="modal" id="gallery-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Photo Gallery</h2>
+                <button class="close-btn" onclick="closeModal('gallery-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Upload Images</label>
+                    <div class="image-upload" onclick="document.getElementById('gallery-input').click()">
+                        <span class="material-symbols-outlined">add_photo_alternate</span>
+                        <p>Click to upload images (you can select multiple)</p>
+                    </div>
+                    <input type="file" id="gallery-input" accept="image/*" multiple style="display: none;" onchange="handleGalleryUpload(event)">
+                </div>
+                <div id="gallery-preview" class="image-preview-grid"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('gallery-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section Modal -->
+    <div class="modal" id="contact-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Contact Information</h2>
+                <button class="close-btn" onclick="closeModal('contact-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Main Email</label>
+                    <input type="email" id="contact-email" placeholder="e.g., contact@empireliberty.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="contact-phone" placeholder="e.g., +91 98765 43210">
+                </div>
+                <div class="form-group">
+                    <label>Mumbai Office Address</label>
+                    <textarea id="contact-mumbai" placeholder="Enter complete address..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Nagpur Office Address</label>
+                    <textarea id="contact-nagpur" placeholder="Enter complete address..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('contact-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSection('contact')">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Education Section Modal -->
+    <div class="modal" id="education-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit AI Education & Training</h2>
+                <button class="close-btn" onclick="closeModal('education-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Main Section Title</label>
+                    <input type="text" id="education-main-title" placeholder="Farmer Education & Training Programs">
+                </div>
+                <div class="form-group">
+                    <label>Main Description</label>
+                    <textarea id="education-main-desc" placeholder="Empowering India's aquaculture community..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>AI Section Title</label>
+                    <input type="text" id="education-ai-title" placeholder="High-Impact AI Features...">
+                </div>
+                <div class="form-group">
+                    <label>Training Program Title</label>
+                    <input type="text" id="education-training-title" placeholder="Comprehensive Farmer Training Programme">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('education-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSection('education')">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Features Modal -->
+    <div class="modal" id="ai-features-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit AI Features (3 Tools)</h2>
+                <button class="close-btn" onclick="closeModal('ai-features-modal')">×</button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <h3 style="margin-bottom: 15px; color: #0066cc;">AI Tool 1 - Fish Seed Demand Predictor</h3>
+                <div class="form-group">
+                    <label for="ai1-title">Title</label>
+                    <input type="text" id="ai1-title" placeholder="AI Fish Seed Demand Predictor">
+                </div>
+                <div class="form-group">
+                    <label for="ai1-badge">Badge Text (e.g., Game-Changer)</label>
+                    <input type="text" id="ai1-badge" placeholder="Game-Changer">
+                </div>
+                <div class="form-group">
+                    <label for="ai1-description">Main Description</label>
+                    <textarea id="ai1-description" rows="3" placeholder="Predict district-wise monthly and seasonal demand..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ai1-benefits">Key Benefits (one per line)</label>
+                    <textarea id="ai1-benefits" rows="4" placeholder="For Farmers: Plan optimal stocking schedules
+For Hatcheries: Optimize production logistics
+For Government: Strategic subsidy distribution
+Reduce Waste: Minimize overstocking"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ai1-datasources">Data Sources</label>
+                    <textarea id="ai1-datasources" rows="2" placeholder="Rainfall patterns • Reservoir water levels • Historical stocking data..."></textarea>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px; color: #0066cc;">AI Tool 2 - Species Recommendation Engine</h3>
+                <div class="form-group">
+                    <label for="ai2-title">Title</label>
+                    <input type="text" id="ai2-title" placeholder="AI-Based Species Recommendation Engine">
+                </div>
+                <div class="form-group">
+                    <label for="ai2-description">Main Description</label>
+                    <textarea id="ai2-description" rows="3" placeholder="Get personalized species recommendations..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ai2-inputs">Farmer Inputs (one per line)</label>
+                    <textarea id="ai2-inputs" rows="4" placeholder="Pond size and depth measurements
+Water temperature and pH levels
+Available budget and investment capacity
+Local market prices and demand"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ai2-outputs">AI-Generated Outputs (one per line)</label>
+                    <textarea id="ai2-outputs" rows="4" placeholder="Optimal Species Mix: e.g., IMC + Pangas + Tilapia
+Profit Projections: Expected ROI and revenue forecasts
+60-Day Feeding Schedule: Precise feeding plans
+Mortality Risk Warnings: Proactive risk assessment"></textarea>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px; color: #0066cc;">AI Tool 3 - Smart Water Quality Scanner</h3>
+                <div class="form-group">
+                    <label for="ai3-title">Title</label>
+                    <input type="text" id="ai3-title" placeholder="Smart Water Quality Scanner">
+                </div>
+                <div class="form-group">
+                    <label for="ai3-badge">Badge Text</label>
+                    <input type="text" id="ai3-badge" placeholder="Photo + Sensor AI">
+                </div>
+                <div class="form-group">
+                    <label for="ai3-description">Main Description</label>
+                    <textarea id="ai3-description" rows="3" placeholder="Transform your mobile phone into a professional water quality testing laboratory..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ai3-detection">Mobile Camera Detection Features (one per line)</label>
+                    <textarea id="ai3-detection" rows="4" placeholder="Ammonia levels via color strip analysis
+pH value measurement
+Water turbidity assessment
+Nitrite/Nitrate concentration detection"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ai3-actions">Instant Corrective Actions (one per line)</label>
+                    <textarea id="ai3-actions" rows="4" placeholder="Lime Dosage: Exact quantity needed for pH balance
+Zeolite Application: Precise ammonia removal amounts
+Salt Requirements: Optimal salinity adjustment
+Aeration Timing: When to increase oxygen levels"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ai3-benefits">Why Farmers Love This</label>
+                    <textarea id="ai3-benefits" rows="2" placeholder="Real-time guidance • No expensive equipment needed • Instant results..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('ai-features-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveAIFeatures()">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Training Modules Modal -->
+    <div class="modal" id="training-modules-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Training Modules (8 Modules)</h2>
+                <button class="close-btn" onclick="closeModal('training-modules-modal')">×</button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div id="training-modules-list"></div>
+                <button class="add-new-btn" onclick="addNewModule()" style="margin-top: 20px;">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Add Training Module
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('training-modules-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Edit Modal -->
+    <div class="modal" id="module-edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="module-edit-title">Edit Module</h2>
+                <button class="close-btn" onclick="closeModal('module-edit-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="module-edit-id">
+                <div class="form-group">
+                    <label>Module Icon Name<br><small style="color: #999;">Material Symbols icons: menu_book, smart_toy, water_drop, restaurant, medication, trending_up, engineering, nature</small></label>
+                    <input type="text" id="module-icon" placeholder="e.g., menu_book">
+                </div>
+                <div class="form-group">
+                    <label>Module Title</label>
+                    <input type="text" id="module-title" placeholder="e.g., Fundamentals of Aquaculture">
+                </div>
+                <div class="form-group">
+                    <label>Module Description</label>
+                    <textarea id="module-description" placeholder="Describe what this module teaches..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('module-edit-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveModule()">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Module
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Milestones Modal -->
+    <div class="modal" id="milestones-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Company Milestones</h2>
+                <button class="close-btn" onclick="closeModal('milestones-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="milestones-list"></div>
+                <button class="add-new-btn" onclick="addNewMilestone()" style="margin-top: 20px;">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Add Milestone
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('milestones-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Milestone Edit Modal -->
+    <div class="modal" id="milestone-edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="milestone-edit-title">Edit Milestone</h2>
+                <button class="close-btn" onclick="closeModal('milestone-edit-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="milestone-edit-id">
+                <div class="form-group">
+                    <label>Milestone Title</label>
+                    <input type="text" id="milestone-title" placeholder="e.g., ₹495 Crore Government MOU">
+                </div>
+                <div class="form-group">
+                    <label>Milestone Description</label>
+                    <textarea id="milestone-description" placeholder="Describe this achievement..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('milestone-edit-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveMilestone()">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Milestone
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Modal -->
+    <div class="modal" id="footer-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Footer Content</h2>
+                <button class="close-btn" onclick="closeModal('footer-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Company Description (Short)</label>
+                    <textarea id="footer-description" placeholder="Sustainable aquaculture built on science..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Extended Description</label>
+                    <textarea id="footer-extended" placeholder="Transforming India's fish farming industry..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Copyright Text</label>
+                    <input type="text" id="footer-copyright" placeholder="© 2025 Empire Liberty Group...">
+                </div>
+                <div class="form-group">
+                    <label>Footer Tagline</label>
+                    <input type="text" id="footer-tagline" placeholder="Sustainable Aquaculture • Farmer Success • Food Security">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('footer-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSection('footer')">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Media Modal -->
+    <div class="modal" id="social-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Social Media Links</h2>
+                <button class="close-btn" onclick="closeModal('social-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>LinkedIn URL</label>
+                    <input type="url" id="social-linkedin" placeholder="https://linkedin.com/company/...">
+                </div>
+                <div class="form-group">
+                    <label>YouTube URL</label>
+                    <input type="url" id="social-youtube" placeholder="https://youtube.com/@...">
+                </div>
+                <div class="form-group">
+                    <label>Instagram URL</label>
+                    <input type="url" id="social-instagram" placeholder="https://instagram.com/...">
+                </div>
+                <div class="form-group">
+                    <label>Twitter/X URL</label>
+                    <input type="url" id="social-twitter" placeholder="https://twitter.com/...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('social-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSection('social')">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAllFrontendData();
+            loadAllData();
+            updateStats();
+        });
+
+        // Current editing variables
+        let currentTeamPhoto = null;
+
+        // Open section modal
+        function openSection(section) {
+            const modal = document.getElementById(section + '-modal');
+            if (modal) {
+                loadSectionData(section);
+                modal.classList.add('active');
+            }
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // Load section data from localStorage
+        function loadSectionData(section) {
+            try {
+                const data = JSON.parse(localStorage.getItem('empire_' + section) || '{}');
+                
+                switch(section) {
+                    case 'navbar':
+                        document.getElementById('nav-logo').value = data.logo || 'Empire Liberty Group';
+                        document.getElementById('nav-menu-items').value = data.menuItems || 'Home,About Us,Projects,Technology,Education,Milestones,Media,Careers,Contact';
+                        break;
+                    
+                    case 'trust':
+                        document.getElementById('trust-heading').value = data.heading || 'Trusted by Government • Proven Results • Pan-India Operations';
+                        document.getElementById('trust-badge1-title').value = data.badge1Title || '₹495 Crore MOU';
+                        document.getElementById('trust-badge1-desc').value = data.badge1Desc || '';
+                        document.getElementById('trust-badge2-title').value = data.badge2Title || '6 Crore+ Production';
+                        document.getElementById('trust-badge2-desc').value = data.badge2Desc || '';
+                        document.getElementById('trust-badge3-title').value = data.badge3Title || 'Pan-India Projects';
+                        document.getElementById('trust-badge3-desc').value = data.badge3Desc || '';
+                        document.getElementById('trust-badge4-title').value = data.badge4Title || 'International Collaboration';
+                        document.getElementById('trust-badge4-desc').value = data.badge4Desc || '';
+                        break;
+                    
+                    case 'technology':
+                        document.getElementById('tech1-title').value = data.tech1Title || 'Biofloc Technology';
+                        document.getElementById('tech1-desc').value = data.tech1Desc || '';
+                        document.getElementById('tech2-title').value = data.tech2Title || 'Recirculating Aquaculture Systems';
+                        document.getElementById('tech2-desc').value = data.tech2Desc || '';
+                        document.getElementById('tech3-title').value = data.tech3Title || 'Cage Culture & Reservoir Operations';
+                        document.getElementById('tech3-desc').value = data.tech3Desc || '';
+                        document.getElementById('tech4-title').value = data.tech4Title || 'Modern Hatchery Operations';
+                        document.getElementById('tech4-desc').value = data.tech4Desc || '';
+                        document.getElementById('tech5-title').value = data.tech5Title || 'Feed & Nutrition Management';
+                        document.getElementById('tech5-desc').value = data.tech5Desc || '';
+                        document.getElementById('tech6-title').value = data.tech6Title || 'Quality & Traceability';
+                        document.getElementById('tech6-desc').value = data.tech6Desc || '';
+                        break;
+                    
+                    case 'media':
+                        document.getElementById('media1-title').value = data.media1Title || '₹495 Crore MOU';
+                        document.getElementById('media1-desc').value = data.media1Desc || '';
+                        document.getElementById('media1-link').value = data.media1Link || '';
+                        document.getElementById('media2-title').value = data.media2Title || 'Press Releases';
+                        document.getElementById('media2-desc').value = data.media2Desc || '';
+                        document.getElementById('media2-link').value = data.media2Link || '';
+                        document.getElementById('media3-title').value = data.media3Title || 'Operations Videos';
+                        document.getElementById('media3-desc').value = data.media3Desc || '';
+                        document.getElementById('media3-link').value = data.media3Link || '';
+                        break;
+                    
+                    case 'careers':
+                        document.getElementById('career1-title').value = data.career1Title || 'Partnership & Investment';
+                        document.getElementById('career1-desc').value = data.career1Desc || '';
+                        document.getElementById('career2-title').value = data.career2Title || 'Tender & Procurement';
+                        document.getElementById('career2-desc').value = data.career2Desc || '';
+                        document.getElementById('career3-title').value = data.career3Title || 'Farmer Programs';
+                        document.getElementById('career3-desc').value = data.career3Desc || '';
+                        document.getElementById('career4-title').value = data.career4Title || 'Media & Press';
+                        document.getElementById('career4-desc').value = data.career4Desc || '';
+                        break;
+                    
+                    case 'hero':
+                        document.getElementById('hero-title').value = data.title || 'Building India\'s Aquaculture Future';
+                        document.getElementById('hero-subtitle').value = data.subtitle || 'Empire Liberty Group is revolutionizing fisheries with advanced hatchery technology and sustainable practices.';
+                        document.getElementById('hero-cta1').value = data.cta1 || 'Request Quotation';
+                        document.getElementById('hero-cta2').value = data.cta2 || 'Partnership Inquiry';
+                        document.getElementById('hero-cta3').value = data.cta3 || 'View Projects';
+                        break;
+                    
+                    case 'about':
+                        document.getElementById('about-tagline').value = data.tagline || 'Pioneering Sustainable Aquaculture';
+                        document.getElementById('about-description').value = data.description || 'Empire Liberty Group is committed to transforming India\'s aquaculture industry...';
+                        break;
+                    
+                    case 'stats':
+                        document.getElementById('stat-mou').value = data.mou || '30';
+                        document.getElementById('stat-locations').value = data.locations || '5';
+                        document.getElementById('stat-spawn').value = data.spawn || '100 Million+';
+                        document.getElementById('stat-fingerlings').value = data.fingerlings || '50 Million+';
+                        break;
+                    
+                    case 'projects':
+                        loadProjectsList();
+                        break;
+                    
+                    case 'team':
+                        loadTeamList();
+                        break;
+                    
+                    case 'gallery':
+                        loadGalleryImages();
+                        break;
+                    
+                    case 'contact':
+                        document.getElementById('contact-email').value = data.email || '';
+                        document.getElementById('contact-phone').value = data.phone || '';
+                        document.getElementById('contact-mumbai').value = data.mumbai || '';
+                        document.getElementById('contact-nagpur').value = data.nagpur || '';
+                        break;
+                    
+                    case 'education':
+                        document.getElementById('education-main-title').value = data.mainTitle || 'Farmer Education & Training Programs';
+                        document.getElementById('education-main-desc').value = data.mainDesc || '';
+                        document.getElementById('education-ai-title').value = data.aiTitle || 'High-Impact AI Features';
+                        document.getElementById('education-training-title').value = data.trainingTitle || '';
+                        break;
+                    
+                    case 'ai-features':
+                        document.getElementById('ai1-title').value = data.ai1Title || 'AI Fish Seed Demand Predictor';
+                        document.getElementById('ai1-badge').value = data.ai1Badge || 'Game-Changer';
+                        document.getElementById('ai1-description').value = data.ai1Description || '';
+                        document.getElementById('ai1-benefits').value = data.ai1Benefits || '';
+                        document.getElementById('ai1-datasources').value = data.ai1Datasources || '';
+                        document.getElementById('ai2-title').value = data.ai2Title || 'AI-Based Species Recommendation Engine';
+                        document.getElementById('ai2-description').value = data.ai2Description || '';
+                        document.getElementById('ai2-inputs').value = data.ai2Inputs || '';
+                        document.getElementById('ai2-outputs').value = data.ai2Outputs || '';
+                        document.getElementById('ai3-title').value = data.ai3Title || 'Smart Water Quality Scanner';
+                        document.getElementById('ai3-badge').value = data.ai3Badge || 'Photo + Sensor AI';
+                        document.getElementById('ai3-description').value = data.ai3Description || '';
+                        document.getElementById('ai3-detection').value = data.ai3Detection || '';
+                        document.getElementById('ai3-actions').value = data.ai3Actions || '';
+                        document.getElementById('ai3-benefits').value = data.ai3Benefits || '';
+                        break;
+                    
+                    case 'training-modules':
+                        loadModulesList();
+                        break;
+                    
+                    case 'milestones':
+                        loadMilestonesList();
+                        break;
+                    
+                    case 'footer':
+                        document.getElementById('footer-description').value = data.description || '';
+                        document.getElementById('footer-extended').value = data.extended || '';
+                        document.getElementById('footer-copyright').value = data.copyright || '© 2025 Empire Liberty Group. All rights reserved.';
+                        document.getElementById('footer-tagline').value = data.tagline || '';
+                        break;
+                    
+                    case 'social':
+                        document.getElementById('social-linkedin').value = data.linkedin || '';
+                        document.getElementById('social-youtube').value = data.youtube || '';
+                        document.getElementById('social-instagram').value = data.instagram || '';
+                        document.getElementById('social-twitter').value = data.twitter || '';
+                        break;
+                }
+            } catch (error) {
+                console.error('Error loading section data:', error);
+            }
+        }
+
+        // Save section data
+        function saveSection(section) {
+            showLoading();
+            
+            try {
+                let data = {};
+                
+                switch(section) {
+                    case 'navbar':
+                        data = {
+                            logo: document.getElementById('nav-logo').value,
+                            menuItems: document.getElementById('nav-menu-items').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'trust':
+                        data = {
+                            heading: document.getElementById('trust-heading').value,
+                            badge1Title: document.getElementById('trust-badge1-title').value,
+                            badge1Desc: document.getElementById('trust-badge1-desc').value,
+                            badge2Title: document.getElementById('trust-badge2-title').value,
+                            badge2Desc: document.getElementById('trust-badge2-desc').value,
+                            badge3Title: document.getElementById('trust-badge3-title').value,
+                            badge3Desc: document.getElementById('trust-badge3-desc').value,
+                            badge4Title: document.getElementById('trust-badge4-title').value,
+                            badge4Desc: document.getElementById('trust-badge4-desc').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'technology':
+                        data = {
+                            tech1Title: document.getElementById('tech1-title').value,
+                            tech1Desc: document.getElementById('tech1-desc').value,
+                            tech2Title: document.getElementById('tech2-title').value,
+                            tech2Desc: document.getElementById('tech2-desc').value,
+                            tech3Title: document.getElementById('tech3-title').value,
+                            tech3Desc: document.getElementById('tech3-desc').value,
+                            tech4Title: document.getElementById('tech4-title').value,
+                            tech4Desc: document.getElementById('tech4-desc').value,
+                            tech5Title: document.getElementById('tech5-title').value,
+                            tech5Desc: document.getElementById('tech5-desc').value,
+                            tech6Title: document.getElementById('tech6-title').value,
+                            tech6Desc: document.getElementById('tech6-desc').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'media':
+                        data = {
+                            media1Title: document.getElementById('media1-title').value,
+                            media1Desc: document.getElementById('media1-desc').value,
+                            media1Link: document.getElementById('media1-link').value,
+                            media2Title: document.getElementById('media2-title').value,
+                            media2Desc: document.getElementById('media2-desc').value,
+                            media2Link: document.getElementById('media2-link').value,
+                            media3Title: document.getElementById('media3-title').value,
+                            media3Desc: document.getElementById('media3-desc').value,
+                            media3Link: document.getElementById('media3-link').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'careers':
+                        data = {
+                            career1Title: document.getElementById('career1-title').value,
+                            career1Desc: document.getElementById('career1-desc').value,
+                            career2Title: document.getElementById('career2-title').value,
+                            career2Desc: document.getElementById('career2-desc').value,
+                            career3Title: document.getElementById('career3-title').value,
+                            career3Desc: document.getElementById('career3-desc').value,
+                            career4Title: document.getElementById('career4-title').value,
+                            career4Desc: document.getElementById('career4-desc').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'hero':
+                        data = {
+                            title: document.getElementById('hero-title').value,
+                            subtitle: document.getElementById('hero-subtitle').value,
+                            cta1: document.getElementById('hero-cta1').value,
+                            cta2: document.getElementById('hero-cta2').value,
+                            cta3: document.getElementById('hero-cta3').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'about':
+                        data = {
+                            tagline: document.getElementById('about-tagline').value,
+                            description: document.getElementById('about-description').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'contact':
+                        data = {
+                            email: document.getElementById('contact-email').value,
+                            phone: document.getElementById('contact-phone').value,
+                            mumbai: document.getElementById('contact-mumbai').value,
+                            nagpur: document.getElementById('contact-nagpur').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'education':
+                        data = {
+                            mainTitle: document.getElementById('education-main-title').value,
+                            mainDesc: document.getElementById('education-main-desc').value,
+                            aiTitle: document.getElementById('education-ai-title').value,
+                            trainingTitle: document.getElementById('education-training-title').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'footer':
+                        data = {
+                            description: document.getElementById('footer-description').value,
+                            extended: document.getElementById('footer-extended').value,
+                            copyright: document.getElementById('footer-copyright').value,
+                            tagline: document.getElementById('footer-tagline').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                    
+                    case 'social':
+                        data = {
+                            linkedin: document.getElementById('social-linkedin').value,
+                            youtube: document.getElementById('social-youtube').value,
+                            instagram: document.getElementById('social-instagram').value,
+                            twitter: document.getElementById('social-twitter').value,
+                            lastUpdated: new Date().toISOString()
+                        };
+                        break;
+                }
+                
+                localStorage.setItem('empire_' + section, JSON.stringify(data));
+                
+                // Update master content
+                updateMasterContent();
+                
+                hideLoading();
+                showSuccess();
+                closeModal(section + '-modal');
+                updateStats();
+                
+            } catch (error) {
+                console.error('Error saving section:', error);
+                hideLoading();
+                alert('Error saving changes. Please try again.');
+            }
+        }
+
+        // Initialize all frontend data
+        function initializeAllFrontendData() {
+            // Check if already initialized
+            if (localStorage.getItem('empire_initialized')) {
+                return;
+            }
+            
+            // Initialize with actual frontend content from empire.html
+            const frontendData = {
+                navbar: {
+                    logo: 'Empire Liberty Group',
+                    menuItems: 'Home,About Us,Projects,Technology,Education,Milestones,Media,Careers,Contact'
+                },
+                trust: {
+                    heading: 'Trusted by Government • Proven Results • Pan-India Operations',
+                    badge1Title: '₹495 Crore MOU',
+                    badge1Desc: 'Strategic development partnership with Government led by Nitin Gadkari for Vidarbha and national aquaculture growth',
+                    badge2Title: '6 Crore+ Production',
+                    badge2Desc: '5 crore spawn produced • 1 crore fingerlings distributed across India',
+                    badge3Title: 'Pan-India Projects',
+                    badge3Desc: 'Operations in Nagpur, Mumbai, Pune, Satara (Dhom) and expanding nationwide',
+                    badge4Title: 'International Collaboration',
+                    badge4Desc: 'Strategic aquarium partnership with Dubai, expanding global reach'
+                },
+                hero: {
+                    title: 'Empire Liberty Group — Building India\'s aquaculture future.',
+                    subtitle: 'From hatcheries to cage farms, we deliver scalable, sustainable fish production and empower farmers with technology and guaranteed market access.',
+                    cta1: 'Request Quotation',
+                    cta2: 'Partnership Inquiry',
+                    cta3: 'View Projects'
+                },
+                about: {
+                    tagline: 'Empire Liberty Group transforms aquaculture through modern hatchery science',
+                    description: 'Empire Liberty Group specializes in commercial hatcheries, cage culture systems and integrated aquaculture projects across India. Backed by a landmark ₹495 crore MOU with the Government (Nitin Gadkari) and strategic initiatives in Vidarbha, we champion farmer livelihoods, food security and export-quality production.'
+                },
+                technology: {
+                    tech1Title: 'Biofloc Technology',
+                    tech1Desc: 'Zero water exchange systems with beneficial microbial communities for intensive fish production.',
+                    tech2Title: 'Recirculating Aquaculture Systems (RAS)',
+                    tech2Desc: 'Advanced filtration and water treatment for year-round controlled environment production.',
+                    tech3Title: 'Cage Culture & Reservoir Operations',
+                    tech3Desc: 'Modern cage design, optimized stocking protocols, scientific feed management, and comprehensive health monitoring.',
+                    tech4Title: 'Modern Hatchery Operations',
+                    tech4Desc: 'Controlled spawning, broodstock management, and quality fingerling production.',
+                    tech5Title: 'Feed & Nutrition Management',
+                    tech5Desc: 'Precision feeding strategies optimized for growth and health.',
+                    tech6Title: 'Quality & Traceability',
+                    tech6Desc: 'Comprehensive batch records, disease surveillance systems, and stringent QA standards.'
+                },
+                contact: {
+                    email: 'support@empirelibertygroup.com',
+                    phone: '+91 [To be provided]',
+                    mumbai: '[Mumbai Address to be provided]',
+                    nagpur: '[Nagpur Address to be provided]'
+                },
+                education: {
+                    mainTitle: 'Farmer Education & Training Programs',
+                    mainDesc: 'Empowering India\'s aquaculture community with cutting-edge AI-powered tools',
+                    aiTitle: 'High-Impact AI Features for Fisheries & Aquaculture',
+                    trainingTitle: 'Comprehensive Farmer Training Programme'
+                },
+                media: {
+                    media1Title: '₹495 Crore MOU',
+                    media1Desc: 'Official MOU document with Government of India for strategic aquaculture development.',
+                    media1Link: '#',
+                    media2Title: 'Press Releases',
+                    media2Desc: 'Collection of press releases, media coverage, and official announcements.',
+                    media2Link: '#',
+                    media3Title: 'Operations Videos',
+                    media3Desc: 'Video documentation of hatchery operations, cage culture systems, and project highlights.',
+                    media3Link: '#'
+                },
+                careers: {
+                    career1Title: 'Partnership & Investment',
+                    career1Desc: 'Explore buy-back guarantees, co-investment opportunities, and strategic partnerships with guaranteed market access.',
+                    career2Title: 'Tender & Procurement',
+                    career2Desc: 'Vendor opportunities for feed plant, cage suppliers, cold storage, and aquaculture equipment supply.',
+                    career3Title: 'Farmer Programs',
+                    career3Desc: 'Free seed program registration, technical support, and guaranteed buy-back schemes for fish farmers.',
+                    career4Title: 'Media & Press',
+                    career4Desc: 'Press kit downloads, media contact, and official communication resources for journalists and media partners.'
+                },
+                footer: {
+                    description: 'Sustainable aquaculture built on science, partnerships and farmer success.',
+                    extended: 'Transforming India\'s fish farming industry through innovative hatchery technologies.',
+                    copyright: '© 2025 Empire Liberty Group. All rights reserved.',
+                    tagline: 'Sustainable Aquaculture • Farmer Success • Food Security'
+                },
+                social: {
+                    linkedin: '',
+                    youtube: '',
+                    instagram: '',
+                    twitter: ''
+                },
+                'ai-features': {
+                    ai1Title: 'AI Fish Seed Demand Predictor',
+                    ai1Badge: 'Game-Changer',
+                    ai1Description: 'Predict district-wise monthly and seasonal demand for spawn, fry, and fingerlings with unprecedented accuracy using advanced machine learning algorithms.',
+                    ai1Benefits: 'For Farmers: Plan optimal stocking schedules and quantities\nFor Hatcheries: Optimize production → storage → transport logistics\nFor Government: Strategic subsidy distribution planning\nReduce Waste: Minimize overstocking and shortages',
+                    ai1Datasources: 'Rainfall patterns • Reservoir water levels • Historical stocking data • Cold/warm season cycles • Market demand trends • Regional consumption patterns',
+                    ai2Title: 'AI-Based Species Recommendation Engine',
+                    ai2Description: 'Get personalized species recommendations based on your specific pond conditions, budget, and market opportunities.',
+                    ai2Inputs: 'Pond size and depth measurements\nWater temperature and pH levels\nAvailable budget and investment capacity\nLocal market prices and demand',
+                    ai2Outputs: 'Optimal Species Mix: e.g., IMC + Pangas + Tilapia\nProfit Projections: Expected ROI and revenue forecasts\n60-Day Feeding Schedule: Precise feeding plans\nMortality Risk Warnings: Proactive risk assessment',
+                    ai3Title: 'Smart Water Quality Scanner',
+                    ai3Badge: 'Photo + Sensor AI',
+                    ai3Description: 'Transform your mobile phone into a professional water quality testing laboratory using computer vision and AI analysis.',
+                    ai3Detection: 'Ammonia levels via color strip analysis\npH value measurement\nWater turbidity assessment\nNitrite/Nitrate concentration detection',
+                    ai3Actions: 'Lime Dosage: Exact quantity needed for pH balance\nZeolite Application: Precise ammonia removal amounts\nSalt Requirements: Optimal salinity adjustment\nAeration Timing: When to increase oxygen levels',
+                    ai3Benefits: 'Real-time guidance • No expensive equipment needed • Instant results • Professional accuracy • Available 24/7 • Works offline • Saves money on consultants'
+                }
+            };
+            
+            // Save all to localStorage
+            Object.keys(frontendData).forEach(key => {
+                if (!localStorage.getItem('empire_' + key)) {
+                    localStorage.setItem('empire_' + key, JSON.stringify(frontendData[key]));
+                }
+            });
+            
+            // Initialize training modules if not exists
+            if (!localStorage.getItem('empire_training_modules')) {
+                localStorage.setItem('empire_training_modules', JSON.stringify({
+                    modules: [
+                        {id: 'mod1', icon: 'menu_book', title: 'Fundamentals of Aquaculture', description: 'Basic fish biology, water chemistry, pond preparation.'},
+                        {id: 'mod2', icon: 'smart_toy', title: 'AI Tools Mastery', description: 'Hands-on training with AI Seed Predictor, Species Recommender.'},
+                        {id: 'mod3', icon: 'water_drop', title: 'Water Quality Management', description: 'Advanced techniques for maintaining optimal water parameters.'},
+                        {id: 'mod4', icon: 'restaurant', title: 'Feed Management & Nutrition', description: 'Optimal feeding strategies, feed formulation, FCR optimization.'},
+                        {id: 'mod5', icon: 'medication', title: 'Disease Prevention & Treatment', description: 'Identify common fish diseases, preventive measures.'},
+                        {id: 'mod6', icon: 'trending_up', title: 'Business & Market Access', description: 'Profit calculation, market analysis, pricing strategies.'},
+                        {id: 'mod7', icon: 'engineering', title: 'Biofloc & Advanced Systems', description: 'Intensive culture techniques, biofloc technology.'},
+                        {id: 'mod8', icon: 'nature', title: 'Sustainable Practices', description: 'Environmental conservation, water recycling.'}
+                    ]
+                }));
+            }
+            
+            // Initialize milestones
+            if (!localStorage.getItem('empire_milestones')) {
+                localStorage.setItem('empire_milestones', JSON.stringify({
+                    milestones: [
+                        {id: 'mil1', title: '₹495 Crore Government MOU', description: 'Landmark MOU with Government led by Nitin Gadkari for scaling operations.'},
+                        {id: 'mil2', title: 'Production Milestones', description: 'Successfully produced 5 crore spawn and distributed 1 crore fingerlings.'},
+                        {id: 'mil3', title: 'Technology Integration', description: 'Successful biofloc technology integration and cage culture rollouts.'},
+                        {id: 'mil4', title: 'International Expansion', description: 'Strategic international aquarium collaboration with Dubai.'}
+                    ]
+                }));
+            }
+            
+            // Initialize projects with actual frontend data
+            if (!localStorage.getItem('empire_projects')) {
+                localStorage.setItem('empire_projects', JSON.stringify({
+                    projects: [
+                        {
+                            id: 'project_1',
+                            name: 'Dhom Fish Seed Production Centre',
+                            location: 'Satara, Maharashtra',
+                            status: 'Active',
+                            description: 'State-level hatchery producing spawn & fingerlings with student outreach programs and government collaborations. Advanced breeding facilities with quality control systems.',
+                            lastUpdated: new Date().toISOString()
+                        },
+                        {
+                            id: 'project_2',
+                            name: 'Nagpur Hatchery & Aquarium Projects',
+                            location: 'Nagpur, Maharashtra',
+                            status: 'Expanding',
+                            description: 'Large-scale hatchery with aquarium tie-up, featuring storage and cold-chain expansion plans for comprehensive Vidarbha development.',
+                            lastUpdated: new Date().toISOString()
+                        },
+                        {
+                            id: 'project_3',
+                            name: 'Mumbai & Pune Hatcheries',
+                            location: 'Mumbai & Pune, Maharashtra',
+                            status: 'Operational',
+                            description: 'Metropolitan production centers for fingerlings and grow-out operations, serving urban and suburban markets with fresh, quality fish.',
+                            lastUpdated: new Date().toISOString()
+                        },
+                        {
+                            id: 'project_4',
+                            name: 'Cage Culture Projects',
+                            location: 'Multiple Reservoirs/Lakes',
+                            status: 'Multi-State',
+                            description: 'Commercial cage farming across multiple water bodies for scalable market-ready fish production using modern cage technology and feed management.',
+                            lastUpdated: new Date().toISOString()
+                        }
+                    ],
+                    lastUpdated: new Date().toISOString()
+                }));
+            }
+            
+            // Initialize team members
+            if (!localStorage.getItem('empire_team')) {
+                localStorage.setItem('empire_team', JSON.stringify({
+                    members: [
+                        {
+                            id: 'team_1',
+                            name: 'Azad Samrat Yadav',
+                            role: 'Founder & CEO',
+                            bio: 'Visionary leader driving India\'s aquaculture transformation through innovative technologies and strategic partnerships.',
+                            photo: null
+                        }
+                    ],
+                    lastUpdated: new Date().toISOString()
+                }));
+            }
+            
+            // Initialize gallery
+            if (!localStorage.getItem('empire_gallery')) {
+                localStorage.setItem('empire_gallery', JSON.stringify({
+                    images: [
+                        {id: 'gallery_1', url: '', caption: 'Hatchery Operations', category: 'facility'},
+                        {id: 'gallery_2', url: '', caption: 'Cage Culture System', category: 'projects'},
+                        {id: 'gallery_3', url: '', caption: 'Fish Fingerlings', category: 'production'},
+                        {id: 'gallery_4', url: '', caption: 'Team Training Session', category: 'training'}
+                    ],
+                    lastUpdated: new Date().toISOString()
+                }));
+            }
+            
+            localStorage.setItem('empire_initialized', 'true');
+            console.log('Frontend content initialized successfully!');
+        }
+
+        // Training Modules Management
+        function loadModulesList() {
+            const modulesData = JSON.parse(localStorage.getItem('empire_training_modules') || '{"modules": []}');
+            const list = document.getElementById('training-modules-list');
+            
+            if (!list) return;
+            
+            if (modulesData.modules.length === 0) {
+                list.innerHTML = '<p style=\"text-align: center; color: #999; padding: 40px;\">No modules yet.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            modulesData.modules.forEach(module => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div class=\"list-item-content\">
+                        <h4><span class=\"material-symbols-outlined\" style=\"font-size: 20px; vertical-align: middle; margin-right: 8px;\">${module.icon}</span>${module.title}</h4>
+                        <p>${module.description}</p>
+                    </div>
+                    <div class=\"list-item-actions\">
+                        <button class=\"icon-btn edit\" onclick=\"editModule('${module.id}')\">
+                            <span class=\"material-symbols-outlined\">edit</span>
+                        </button>
+                        <button class=\"icon-btn delete\" onclick=\"deleteModule('${module.id}')\">
+                            <span class=\"material-symbols-outlined\">delete</span>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addNewModule() {
+            document.getElementById('module-edit-title').textContent = 'Add New Module';
+            document.getElementById('module-edit-id').value = '';
+            document.getElementById('module-icon').value = '';
+            document.getElementById('module-title').value = '';
+            document.getElementById('module-description').value = '';
+            closeModal('training-modules-modal');
+            openModal('module-edit-modal');
+        }
+
+        function editModule(id) {
+            const modulesData = JSON.parse(localStorage.getItem('empire_training_modules') || '{"modules": []}');
+            const module = modulesData.modules.find(m => m.id === id);
+            
+            if (module) {
+                document.getElementById('module-edit-title').textContent = 'Edit Module';
+                document.getElementById('module-edit-id').value = module.id;
+                document.getElementById('module-icon').value = module.icon;
+                document.getElementById('module-title').value = module.title;
+                document.getElementById('module-description').value = module.description;
+                closeModal('training-modules-modal');
+                openModal('module-edit-modal');
+            }
+        }
+
+        function deleteModule(id) {
+            if (!confirm('Are you sure you want to delete this module?')) return;
+            
+            showLoading();
+            const modulesData = JSON.parse(localStorage.getItem('empire_training_modules') || '{"modules": []}');
+            modulesData.modules = modulesData.modules.filter(m => m.id !== id);
+            localStorage.setItem('empire_training_modules', JSON.stringify(modulesData));
+            updateMasterContent();
+            hideLoading();
+            showSuccess();
+            loadModulesList();
+        }
+
+        function saveModule() {
+            const id = document.getElementById('module-edit-id').value;
+            const icon = document.getElementById('module-icon').value.trim();
+            const title = document.getElementById('module-title').value.trim();
+            const description = document.getElementById('module-description').value.trim();
+            
+            if (!title) {
+                alert('Please enter a module title.');
+                return;
+            }
+            
+            showLoading();
+            const modulesData = JSON.parse(localStorage.getItem('empire_training_modules') || '{"modules": []}');
+            
+            if (id) {
+                const module = modulesData.modules.find(m => m.id === id);
+                if (module) {
+                    module.icon = icon;
+                    module.title = title;
+                    module.description = description;
+                }
+            } else {
+                modulesData.modules.push({
+                    id: 'mod_' + Date.now(),
+                    icon: icon,
+                    title: title,
+                    description: description
+                });
+            }
+            
+            localStorage.setItem('empire_training_modules', JSON.stringify(modulesData));
+            updateMasterContent();
+            hideLoading();
+            showSuccess();
+            closeModal('module-edit-modal');
+            loadModulesList();
+            openModal('training-modules-modal');
+        }
+
+        // Milestones Management
+        function loadMilestonesList() {
+            const milestonesData = JSON.parse(localStorage.getItem('empire_milestones') || '{"milestones": []}');
+            const list = document.getElementById('milestones-list');
+            
+            if (!list) return;
+            
+            if (milestonesData.milestones.length === 0) {
+                list.innerHTML = '<p style=\"text-align: center; color: #999; padding: 40px;\">No milestones yet.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            milestonesData.milestones.forEach(milestone => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div class=\"list-item-content\">
+                        <h4>${milestone.title}</h4>
+                        <p>${milestone.description}</p>
+                    </div>
+                    <div class=\"list-item-actions\">
+                        <button class=\"icon-btn edit\" onclick=\"editMilestone('${milestone.id}')\">
+                            <span class=\"material-symbols-outlined\">edit</span>
+                        </button>
+                        <button class=\"icon-btn delete\" onclick=\"deleteMilestone('${milestone.id}')\">
+                            <span class=\"material-symbols-outlined\">delete</span>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addNewMilestone() {
+            document.getElementById('milestone-edit-title').textContent = 'Add New Milestone';
+            document.getElementById('milestone-edit-id').value = '';
+            document.getElementById('milestone-title').value = '';
+            document.getElementById('milestone-description').value = '';
+            closeModal('milestones-modal');
+            openModal('milestone-edit-modal');
+        }
+
+        function editMilestone(id) {
+            const milestonesData = JSON.parse(localStorage.getItem('empire_milestones') || '{"milestones": []}');
+            const milestone = milestonesData.milestones.find(m => m.id === id);
+            
+            if (milestone) {
+                document.getElementById('milestone-edit-title').textContent = 'Edit Milestone';
+                document.getElementById('milestone-edit-id').value = milestone.id;
+                document.getElementById('milestone-title').value = milestone.title;
+                document.getElementById('milestone-description').value = milestone.description;
+                closeModal('milestones-modal');
+                openModal('milestone-edit-modal');
+            }
+        }
+
+        function deleteMilestone(id) {
+            if (!confirm('Are you sure you want to delete this milestone?')) return;
+            
+            showLoading();
+            const milestonesData = JSON.parse(localStorage.getItem('empire_milestones') || '{"milestones": []}');
+            milestonesData.milestones = milestonesData.milestones.filter(m => m.id !== id);
+            localStorage.setItem('empire_milestones', JSON.stringify(milestonesData));
+            updateMasterContent();
+            hideLoading();
+            showSuccess();
+            loadMilestonesList();
+        }
+
+        function saveMilestone() {
+            const id = document.getElementById('milestone-edit-id').value;
+            const title = document.getElementById('milestone-title').value.trim();
+            const description = document.getElementById('milestone-description').value.trim();
+            
+            if (!title) {
+                alert('Please enter a milestone title.');
+                return;
+            }
+            
+            showLoading();
+            const milestonesData = JSON.parse(localStorage.getItem('empire_milestones') || '{"milestones": []}');
+            
+            if (id) {
+                const milestone = milestonesData.milestones.find(m => m.id === id);
+                if (milestone) {
+                    milestone.title = title;
+                    milestone.description = description;
+                }
+            } else {
+                milestonesData.milestones.push({
+                    id: 'mil_' + Date.now(),
+                    title: title,
+                    description: description
+                });
+            }
+            
+            localStorage.setItem('empire_milestones', JSON.stringify(milestonesData));
+            updateMasterContent();
+            hideLoading();
+            showSuccess();
+            closeModal('milestone-edit-modal');
+            loadMilestonesList();
+            openModal('milestones-modal');
+        }
+
+        // AI Features (placeholder - can be expanded)
+        // AI Features Management
+        function saveAIFeatures() {
+            showLoading();
+            
+            try {
+                const data = {
+                    ai1Title: document.getElementById('ai1-title').value,
+                    ai1Badge: document.getElementById('ai1-badge').value,
+                    ai1Description: document.getElementById('ai1-description').value,
+                    ai1Benefits: document.getElementById('ai1-benefits').value,
+                    ai1Datasources: document.getElementById('ai1-datasources').value,
+                    ai2Title: document.getElementById('ai2-title').value,
+                    ai2Description: document.getElementById('ai2-description').value,
+                    ai2Inputs: document.getElementById('ai2-inputs').value,
+                    ai2Outputs: document.getElementById('ai2-outputs').value,
+                    ai3Title: document.getElementById('ai3-title').value,
+                    ai3Badge: document.getElementById('ai3-badge').value,
+                    ai3Description: document.getElementById('ai3-description').value,
+                    ai3Detection: document.getElementById('ai3-detection').value,
+                    ai3Actions: document.getElementById('ai3-actions').value,
+                    ai3Benefits: document.getElementById('ai3-benefits').value,
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                localStorage.setItem('empire_ai-features', JSON.stringify(data));
+                updateMasterContent();
+                
+                hideLoading();
+                showSuccess();
+                closeModal('ai-features-modal');
+                updateStats();
+            } catch (error) {
+                console.error('Error saving AI features:', error);
+                hideLoading();
+                alert('Error saving changes. Please try again.');
+            }
+        }
+
+        function loadAIFeaturesList() {
+            const list = document.getElementById('ai-features-list');
+            if (!list) return;
+            list.innerHTML = '<p style=\"padding: 20px; color: #666;\">AI Features section contains the 3 detailed AI tools. Each tool has extensive content including descriptions, benefits, inputs/outputs, and data sources. These are best edited directly in the frontend code or via a specialized editor.</p><p style=\"padding: 20px; color: #999;\">Features: 1) AI Fish Seed Demand Predictor, 2) Species Recommendation Engine, 3) Smart Water Quality Scanner</p>';
+        }
+
+        // Projects Management (existing functions remain)
+        function loadProjectsList() {
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            const list = document.getElementById('projects-list');
+            
+            if (projectsData.projects.length === 0) {
+                list.innerHTML = '<p style=\"text-align: center; color: #999; padding: 40px;\">No projects yet. Click \"Add New Project\" to get started.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            projectsData.projects.forEach(project => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div class=\"list-item-content\">
+                        <h4>${project.name}</h4>
+                        <p>${project.location} • ${project.status}</p>
+                    </div>
+                    <div class=\"list-item-actions\">
+                        <button class=\"icon-btn edit\" onclick=\"editProject('${project.id}')\">
+                            <span class=\"material-symbols-outlined\">edit</span>
+                        </button>
+                        <button class=\"icon-btn delete\" onclick=\"deleteProject('${project.id}')\">
+                            <span class=\"material-symbols-outlined\">delete</span>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addNewProject() {
+            document.getElementById('project-edit-title').textContent = 'Add New Project';
+            document.getElementById('project-edit-id').value = '';
+            document.getElementById('project-name').value = '';
+            document.getElementById('project-location').value = '';
+            document.getElementById('project-status').value = '';
+            document.getElementById('project-description').value = '';
+            
+            closeModal('projects-modal');
+            openModal('project-edit-modal');
+        }
+
+        function editProject(id) {
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            const project = projectsData.projects.find(p => p.id === id);
+            
+            if (project) {
+                document.getElementById('project-edit-title').textContent = 'Edit Project';
+                document.getElementById('project-edit-id').value = project.id;
+                document.getElementById('project-name').value = project.name;
+                document.getElementById('project-location').value = project.location;
+                document.getElementById('project-status').value = project.status;
+                document.getElementById('project-description').value = project.description || '';
+                
+                closeModal('projects-modal');
+                openModal('project-edit-modal');
+            }
+        }
+
+        function deleteProject(id) {
+            if (!confirm('Are you sure you want to delete this project?')) return;
+            
+            showLoading();
+            
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            projectsData.projects = projectsData.projects.filter(p => p.id !== id);
+            projectsData.lastUpdated = new Date().toISOString();
+            
+            localStorage.setItem('empire_projects', JSON.stringify(projectsData));
+            updateMasterContent();
+            
+            hideLoading();
+            showSuccess();
+            loadProjectsList();
+            updateStats();
+        }
+
+        function saveProject() {
+            const id = document.getElementById('project-edit-id').value;
+            const name = document.getElementById('project-name').value.trim();
+            const location = document.getElementById('project-location').value.trim();
+            const status = document.getElementById('project-status').value.trim();
+            const description = document.getElementById('project-description').value.trim();
+            
+            if (!name || !location || !status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            showLoading();
+            
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            
+            if (id) {
+                // Edit existing
+                const project = projectsData.projects.find(p => p.id === id);
+                if (project) {
+                    project.name = name;
+                    project.location = location;
+                    project.status = status;
+                    project.description = description;
+                    project.lastUpdated = new Date().toISOString();
+                }
+            } else {
+                // Add new
+                const newProject = {
+                    id: 'project_' + Date.now(),
+                    name: name,
+                    location: location,
+                    status: status,
+                    description: description,
+                    lastUpdated: new Date().toISOString()
+                };
+                projectsData.projects.push(newProject);
+            }
+            
+            projectsData.lastUpdated = new Date().toISOString();
+            localStorage.setItem('empire_projects', JSON.stringify(projectsData));
+            updateMasterContent();
+            
+            hideLoading();
+            showSuccess();
+            closeModal('project-edit-modal');
+            closeModal('projects-modal');
+            loadProjectsList();
+            updateStats();
+        }
+
+        // Projects Management
+        function loadProjectsList() {
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            const list = document.getElementById('projects-list');
+            
+            if (projectsData.projects.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No projects yet. Click "Add New Project" to get started.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            projectsData.projects.forEach(project => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div class="list-item-content">
+                        <h4>${project.name}</h4>
+                        <p>${project.location} • ${project.status}</p>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="icon-btn edit" onclick="editProject('${project.id}')">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="icon-btn delete" onclick="deleteProject('${project.id}')">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addNewProject() {
+            document.getElementById('project-edit-title').textContent = 'Add New Project';
+            document.getElementById('project-edit-id').value = '';
+            document.getElementById('project-name').value = '';
+            document.getElementById('project-location').value = '';
+            document.getElementById('project-status').value = '';
+            document.getElementById('project-description').value = '';
+            
+            closeModal('projects-modal');
+            openModal('project-edit-modal');
+        }
+
+        function editProject(id) {
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            const project = projectsData.projects.find(p => p.id === id);
+            
+            if (project) {
+                document.getElementById('project-edit-title').textContent = 'Edit Project';
+                document.getElementById('project-edit-id').value = project.id;
+                document.getElementById('project-name').value = project.name;
+                document.getElementById('project-location').value = project.location;
+                document.getElementById('project-status').value = project.status;
+                document.getElementById('project-description').value = project.description || '';
+                
+                closeModal('projects-modal');
+                openModal('project-edit-modal');
+            }
+        }
+
+        function deleteProject(id) {
+            if (!confirm('Are you sure you want to delete this project?')) return;
+            
+            showLoading();
+            
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            projectsData.projects = projectsData.projects.filter(p => p.id !== id);
+            projectsData.lastUpdated = new Date().toISOString();
+            
+            localStorage.setItem('empire_projects', JSON.stringify(projectsData));
+            updateMasterContent();
+            
+            hideLoading();
+            showSuccess();
+            loadProjectsList();
+            updateStats();
+        }
+
+        function saveProject() {
+            const id = document.getElementById('project-edit-id').value;
+            const name = document.getElementById('project-name').value.trim();
+            const location = document.getElementById('project-location').value.trim();
+            const status = document.getElementById('project-status').value.trim();
+            const description = document.getElementById('project-description').value.trim();
+            
+            if (!name || !location || !status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            showLoading();
+            
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            
+            if (id) {
+                // Edit existing
+                const project = projectsData.projects.find(p => p.id === id);
+                if (project) {
+                    project.name = name;
+                    project.location = location;
+                    project.status = status;
+                    project.description = description;
+                    project.lastUpdated = new Date().toISOString();
+                }
+            } else {
+                // Add new
+                projectsData.projects.push({
+                    id: 'project_' + Date.now(),
+                    name: name,
+                    location: location,
+                    status: status,
+                    description: description,
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+            
+            projectsData.lastUpdated = new Date().toISOString();
+            localStorage.setItem('empire_projects', JSON.stringify(projectsData));
+            updateMasterContent();
+            
+            hideLoading();
+            showSuccess();
+            closeModal('project-edit-modal');
+            loadProjectsList();
+            openModal('projects-modal');
+            updateStats();
+        }
+
+        // Team Management
+        function loadTeamList() {
+            const teamData = JSON.parse(localStorage.getItem('empire_team') || '{"members": []}');
+            const list = document.getElementById('team-list');
+            
+            if (teamData.members.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No team members yet. Click "Add Team Member" to get started.</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            teamData.members.forEach(member => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div class="list-item-content">
+                        <h4>${member.name}</h4>
+                        <p>${member.position}</p>
+                    </div>
+                    <div class="list-item-actions">
+                        <button class="icon-btn edit" onclick="editTeamMember('${member.id}')">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="icon-btn delete" onclick="deleteTeamMember('${member.id}')">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addNewTeamMember() {
+            document.getElementById('team-edit-title').textContent = 'Add Team Member';
+            document.getElementById('team-edit-id').value = '';
+            document.getElementById('team-name').value = '';
+            document.getElementById('team-position').value = '';
+            document.getElementById('team-bio').value = '';
+            document.getElementById('team-photo-preview').innerHTML = '';
+            currentTeamPhoto = null;
+            
+            closeModal('team-modal');
+            openModal('team-edit-modal');
+        }
+
+        function editTeamMember(id) {
+            const teamData = JSON.parse(localStorage.getItem('empire_team') || '{"members": []}');
+            const member = teamData.members.find(m => m.id === id);
+            
+            if (member) {
+                document.getElementById('team-edit-title').textContent = 'Edit Team Member';
+                document.getElementById('team-edit-id').value = member.id;
+                document.getElementById('team-name').value = member.name;
+                document.getElementById('team-position').value = member.position;
+                document.getElementById('team-bio').value = member.bio || '';
+                
+                // Load photo preview
+                const preview = document.getElementById('team-photo-preview');
+                if (member.photo) {
+                    preview.innerHTML = `
+                        <div class="image-preview-item">
+                            <img src="${member.photo}" alt="${member.name}">
+                        </div>
+                    `;
+                    currentTeamPhoto = member.photo;
+                } else {
+                    preview.innerHTML = '';
+                    currentTeamPhoto = null;
+                }
+                
+                closeModal('team-modal');
+                openModal('team-edit-modal');
+            }
+        }
+
+        function deleteTeamMember(id) {
+            if (!confirm('Are you sure you want to delete this team member?')) return;
+            
+            showLoading();
+            
+            const teamData = JSON.parse(localStorage.getItem('empire_team') || '{"members": []}');
+            teamData.members = teamData.members.filter(m => m.id !== id);
+            teamData.lastUpdated = new Date().toISOString();
+            
+            localStorage.setItem('empire_team', JSON.stringify(teamData));
+            updateMasterContent();
+            
+            hideLoading();
+            showSuccess();
+            loadTeamList();
+            updateStats();
+        }
+
+        function handleTeamPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentTeamPhoto = e.target.result;
+                document.getElementById('team-photo-preview').innerHTML = `
+                    <div class="image-preview-item">
+                        <img src="${currentTeamPhoto}" alt="Team member photo">
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveTeamMember() {
+            const id = document.getElementById('team-edit-id').value;
+            const name = document.getElementById('team-name').value.trim();
+            const position = document.getElementById('team-position').value.trim();
+            const bio = document.getElementById('team-bio').value.trim();
+            
+            if (!name || !position) {
+                alert('Please fill in name and position.');
+                return;
+            }
+            
+            showLoading();
+            
+            const teamData = JSON.parse(localStorage.getItem('empire_team') || '{"members": []}');
+            
+            if (id) {
+                // Edit existing
+                const member = teamData.members.find(m => m.id === id);
+                if (member) {
+                    member.name = name;
+                    member.position = position;
+                    member.bio = bio;
+                    if (currentTeamPhoto) member.photo = currentTeamPhoto;
+                    member.lastUpdated = new Date().toISOString();
+                }
+            } else {
+                // Add new
+                teamData.members.push({
+                    id: 'member_' + Date.now(),
+                    name: name,
+                    position: position,
+                    bio: bio,
+                    photo: currentTeamPhoto,
+                    lastUpdated: new Date().toISOString()
+                });
+            }
+            
+            teamData.lastUpdated = new Date().toISOString();
+            localStorage.setItem('empire_team', JSON.stringify(teamData));
+            updateMasterContent();
+            
+            hideLoading();
+            showSuccess();
+            closeModal('team-edit-modal');
+            loadTeamList();
+            openModal('team-modal');
+            updateStats();
+        }
+
+        // Gallery Management
+        function loadGalleryImages() {
+            const imagesData = JSON.parse(localStorage.getItem('empire_gallery') || '{"images": []}');
+            const preview = document.getElementById('gallery-preview');
+            
+            if (imagesData.images.length === 0) {
+                preview.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No images yet. Upload some images to get started.</p>';
+                return;
+            }
+            
+            preview.innerHTML = '';
+            imagesData.images.forEach(image => {
+                const item = document.createElement('div');
+                item.className = 'image-preview-item';
+                item.innerHTML = `
+                    <img src="${image.data}" alt="${image.name}">
+                    <button class="delete-img" onclick="deleteGalleryImage('${image.id}')">×</button>
+                `;
+                preview.appendChild(item);
+            });
+        }
+
+        function handleGalleryUpload(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+            
+            showLoading();
+            
+            const imagesData = JSON.parse(localStorage.getItem('empire_gallery') || '{"images": []}');
+            let processed = 0;
+            
+            Array.from(files).forEach((file, index) => {
+                if (!file.type.startsWith('image/')) {
+                    processed++;
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagesData.images.push({
+                        id: 'img_' + Date.now() + '_' + index,
+                        name: file.name,
+                        data: e.target.result,
+                        uploadedAt: new Date().toISOString()
+                    });
+                    
+                    processed++;
+                    if (processed === files.length) {
+                        imagesData.lastUpdated = new Date().toISOString();
+                        localStorage.setItem('empire_gallery', JSON.stringify(imagesData));
+                        updateMasterContent();
+                        hideLoading();
+                        showSuccess();
+                        loadGalleryImages();
+                        updateStats();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            event.target.value = '';
+        }
+
+        function deleteGalleryImage(id) {
+            if (!confirm('Are you sure you want to delete this image?')) return;
+            
+            showLoading();
+            
+            const imagesData = JSON.parse(localStorage.getItem('empire_gallery') || '{"images": []}');
+            imagesData.images = imagesData.images.filter(img => img.id !== id);
+            imagesData.lastUpdated = new Date().toISOString();
+            
+            localStorage.setItem('empire_gallery', JSON.stringify(imagesData));
+            updateMasterContent();
+            
+            hideLoading();
+            showSuccess();
+            loadGalleryImages();
+            updateStats();
+        }
+
+        // Utility Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('active');
+        }
+
+        function showSuccess() {
+            const msg = document.getElementById('success-message');
+            msg.classList.add('active');
+            setTimeout(() => {
+                msg.classList.remove('active');
+            }, 3000);
+        }
+
+        function updateMasterContent() {
+            const masterContent = {
+                hero: JSON.parse(localStorage.getItem('empire_hero') || '{}'),
+                about: JSON.parse(localStorage.getItem('empire_about') || '{}'),
+                stats: JSON.parse(localStorage.getItem('empire_stats') || '{}'),
+                projects: JSON.parse(localStorage.getItem('empire_projects') || '{}'),
+                team: JSON.parse(localStorage.getItem('empire_team') || '{}'),
+                gallery: JSON.parse(localStorage.getItem('empire_gallery') || '{}'),
+                contact: JSON.parse(localStorage.getItem('empire_contact') || '{}'),
+                education: JSON.parse(localStorage.getItem('empire_education') || '{}'),
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('empire_master_content', JSON.stringify(masterContent));
+        }
+
+        function loadAllData() {
+            // Load all sections to ensure data is initialized
+            ['hero', 'about', 'stats', 'projects', 'team', 'gallery', 'contact', 'education'].forEach(section => {
+                loadSectionData(section);
+            });
+        }
+
+        function updateStats() {
+            // Update stats display
+            const projectsData = JSON.parse(localStorage.getItem('empire_projects') || '{"projects": []}');
+            const teamData = JSON.parse(localStorage.getItem('empire_team') || '{"members": []}');
+            const imagesData = JSON.parse(localStorage.getItem('empire_gallery') || '{"images": []}');
+            
+            document.getElementById('total-images').textContent = imagesData.images ? imagesData.images.length : 0;
+            
+            const masterContent = JSON.parse(localStorage.getItem('empire_master_content') || '{}');
+            if (masterContent.lastUpdated) {
+                const date = new Date(masterContent.lastUpdated);
+                const timeAgo = getTimeAgo(date);
+                document.getElementById('last-updated').textContent = timeAgo;
+            }
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            if (seconds < 60) return 'Just Now';
+            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+            return Math.floor(seconds / 86400) + 'd ago';
+        }
+
+        function exportAllData() {
+            showLoading();
+            
+            const masterContent = JSON.parse(localStorage.getItem('empire_master_content') || '{}');
+            const dataStr = JSON.stringify(masterContent, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'empire-liberty-website-backup-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            
+            hideLoading();
+            showSuccess();
+        }
+
+        // Auto-save functionality
+        let autoSaveTimer;
+        function setupAutoSave() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    clearTimeout(autoSaveTimer);
+                    autoSaveTimer = setTimeout(() => {
+                        console.log('Auto-saving...');
+                    }, 2000);
+                });
+            });
+        }
+
+        setTimeout(setupAutoSave, 1000);
+    </script>
+</body>
+</html>

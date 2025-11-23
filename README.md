@@ -4,7 +4,7 @@
 
 This is the official website for Empire Liberty Group, featuring modern hatchery science, commercial cage culture, and farmer-first partnerships across India.
 
-## 🌊 About Empire Liberty Group
+##  About Empire Liberty Group
 
 Empire Liberty Group specializes in:
 - Commercial hatcheries and fish seed production
@@ -13,7 +13,7 @@ Empire Liberty Group specializes in:
 - Farmer support programs with buy-back guarantees
 - Strategic partnerships (₹495 crore MOU with Government)
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### View the Website
 1. Open `src/app/empire.html` in your web browser
@@ -36,7 +36,7 @@ npx http-server src/app -p 8000
 - Manage website content, projects, media, and inquiries
 - View analytics and user messages
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 empire/
@@ -49,7 +49,7 @@ empire/
 └── README.md           # This file
 ```
 
-## ✨ Features
+##  Features
 
 ### Main Website (empire.html)
 - **Apple-like Design**: Clean, modern, responsive layout
@@ -67,7 +67,7 @@ empire/
 - **Team Management**: Update leadership profiles
 - **Site Settings**: SEO, social links, configurations
 
-## 🎯 Key Statistics
+##  Key Statistics
 
 - ₹495 Crore MOU with Government (Nitin Gadkari)
 - 5 crore spawn produced
@@ -75,7 +75,7 @@ empire/
 - Pan-India operations: Nagpur, Mumbai, Pune, Satara (Dhom)
 - International collaboration with Dubai
 
-## 🛠️ Technologies
+##  Technologies
 
 - **Frontend**: Pure HTML5, CSS3, JavaScript
 - **Design**: Apple-inspired modern aesthetic
@@ -83,13 +83,13 @@ empire/
 - **No Dependencies**: Lightweight, fast loading
 - **SEO Ready**: Optimized for search engines
 
-## 📞 Contact
+##  Contact
 
 - **Email**: support@empirelibertygroup.com
 - **Website**: [Empire Liberty Group](./src/app/empire.html)
 - **Focus**: Sustainable aquaculture, farmer prosperity, food security
 
-## 🚀 Deployment
+##  Deployment
 
 Deploy to any web hosting service:
 1. Upload the `src/app/` folder contents
